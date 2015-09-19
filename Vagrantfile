@@ -2,9 +2,12 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
+ENV['ENVIRONMENT'] = "vagrant"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
- 
+
+  config.librarian_puppet.puppetfile_dir = "puppet"
+
   config.vm.define "centos" do |centos|
     centos.vm.hostname = "basecentos"
     centos.vm.box = "centos"
@@ -21,9 +24,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         v.customize ["modifyvm", :id, "--cpus", 1]
     end
 
+    centos.vm.provision :puppet do |puppet|
+      puppet.binary_path       = "/opt/puppetlabs/bin"
+      puppet.hiera_config_path = "puppet/hiera.yaml"
+      #puppet.working_directory = "/puppet"
+      puppet.manifests_path    = "puppet/manifests"
+      puppet.module_path       = "puppet/modules"
+      puppet.manifest_file     = "default.pp"
+      puppet.facter            = {
+                                  "instance_base" => "puppetmaster"
+                                 }
+
+      puppet.options        = ["--verbose --modulepath /vagrant/puppet/modules","--pluginsync",
+                               "--verbose","--hiera_config /etc/hiera.yaml", "--environment #{ENV['ENVIRONMENT']}"]
+
+
+      #centos.vm.synced_folder "puppet", "/etc/puppet", id: "vagrant-puppet-root"
+    end
   end
 
   config.vm.define "win2012" do |win2012|
+
     win2012.vm.communicator = "winrm"
     win2012.winrm.username = "vagrant"
     win2012.winrm.password = "vagrant"
@@ -35,11 +56,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     win2012.vm.hostname = "windows2012"
     win2012.vm.box = "windows2012"
+    win2012.vm.box_url = "windows_2012_r2_virtualbox.box"
     if Vagrant.has_plugin?("vagrant-cachier")
       win2012.cache.scope       = :machine
       win2012.cache.auto_detect = false
     end
-    win2012.vm.box_url = "windows_.box"
+
     win2012.vm.network "private_network", ip: "192.168.33.12"
 
     win2012.vm.provider :virtualbox do |v, override|
@@ -49,5 +71,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
   end
- 
+
 end

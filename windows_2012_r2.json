@@ -28,19 +28,16 @@
   ],
   "provisioners": [
     {
-      "type": "shell",
-      "remote_path": "/tmp/script.bat",
-      "execute_command": "{{.Vars}} cmd /c C:/Windows/Temp/script.bat",
-      "scripts": [
-		"./scripts/windows/vm-guest-tools.bat",
-        "./scripts/windows/enable-rdp.bat",
-		"./scripts/windows/disable-auto-logon.bat"
+      "type": "powershell",
+      "inline": [
+        "ls > c:\\dan.txt"
       ]
     },
     {
-      "type": "shell",
-      "inline": [
-        "rm -rf /tmp/*"
+      "type": "windows-shell",
+      "scripts": [
+        "scripts/windows/enable-rdp.bat",
+        "scripts/windows/disable-auto-logon.bat"
       ]
     }
   ],

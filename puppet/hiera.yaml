@@ -1,0 +1,18 @@
+---
+:backends:
+  - eyaml
+  - yaml
+:logger: console
+:hierarchy:
+  - "node/%{::fqdn}"
+  - "%{::environment}"
+  - "%{::osfamily}"
+  - "%{::location}"
+  - "%{::flavour}"
+  - common
+
+:yaml:
+   :datadir: /etc/puppet/hieradata/%{::environment}
+
+:eyaml:
+   :datadir: /etc/puppet/hieradata/%{::environment}
