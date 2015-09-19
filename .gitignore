@@ -1,0 +1,12 @@
+/iso/*
+!/iso/README.md
+/output-vmware/
+/output-vmware-iso/
+/output-vmware-vmx/
+/output-virtualbox/
+/output-virtualbox-iso/
+/output-virtualbox-ovf/
+/*.box
+.vagrant
+/packer_cache/
+
