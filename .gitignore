@@ -6,6 +6,9 @@
 /output-virtualbox/
 /output-virtualbox-iso/
 /output-virtualbox-ovf/
+.librarian
+.tmp
+Puppetfile.lock
 /*.box
 .vagrant
 /packer_cache/
