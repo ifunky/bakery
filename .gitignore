@@ -8,7 +8,7 @@
 /output-virtualbox-ovf/
 .librarian
 .tmp
-Puppetfile.lock
+Puppetfile .lock
 /*.box
 .vagrant
 /packer_cache/
