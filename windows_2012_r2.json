@@ -28,19 +28,18 @@
   ],
   "provisioners": [
     {
-      "type": "powershell",
-      "inline": [
-        "ls > c:\\dan.txt"
-      ]
-    },
-    {
       "type": "windows-shell",
       "scripts": [
         "scripts/windows/enable-rdp.bat",
         "scripts/windows/disable-auto-logon.bat"
       ]
-    }
-  ],
+    },
+    {
+      "type": "powershell",
+      "scripts": [
+        "scripts/windows/cleanup.ps1"
+      ]
+    }],
   "post-processors": [
     {
       "type": "vagrant",
