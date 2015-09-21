@@ -46,10 +46,10 @@ Create a Windows 2012 R2 Virtual Box
 Before you get started you're going to need an iso image which you'll copy into the /iso folder.  
 
 **Windows 2012 ISO Sources**
-Source  | ISO Checksum (SHA1)
-------------- | -------------
-[MSDN Subscriber Downloads](https://msdn.microsoft.com/subscriptions/json/GetDownloadRequest?brand=MSDN&locale=en-US&fileId=62611&activexDisabled=true&akamaiDL=false):    | 865494E969704BE1C4496D8614314361D025775E
-[180 day Trial](http://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2012-r2)  | 5e2ddcaecc91e80a8ce3ec7ae7838f8a3967ed7f
 
+Source        | ISO Checksum (SHA1)
+------------- | -------------------
+[MSDN Subscriber Downloads](https://msdn.microsoft.com/subscriptions/json/GetDownloadRequest?brand=MSDN&locale=en-US&fileId=62611&activexDisabled=true&akamaiDL=false)    | 865494E969704BE1C4496D8614314361D025775E
+[180 day Trial](http://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2012-r2)  | 5e2ddcaecc91e80a8ce3ec7ae7838f8a3967ed7f
 
 
