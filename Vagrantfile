@@ -1,10 +1,36 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+begin
+  gem "puppet"
+rescue Gem::LoadError
+  raise "puppet is not installed in vagrant gems! please run 'vagrant plugin install puppet'"
+end
+
 VAGRANTFILE_API_VERSION = "2"
 ENV['ENVIRONMENT'] = "vagrant"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  required_plugins = %w(vagrant-r10k vagrant-triggers)
+  plugin_installed = false
+
+  ## Install Vagrant Plugins
+  required_plugins.each do |plugin|
+    unless Vagrant.has_plugin? plugin
+      system "vagrant plugin install #{plugin}"
+      plugin_installed = true
+    end
+  end
+
+  ## Restart Vagrant: if new plugin installed
+  if plugin_installed == true
+    exec "vagrant #{ARGV.join(' ')}"
+  end
+
+  #config.trigger.before :ALL do
+  #  run "mkdir puppet/environments/vagrant/modules"
+  #end
 
   config.r10k.puppet_dir = "puppet/environments/vagrant"
   config.r10k.puppetfile_path = "puppet/environments/vagrant/Puppetfile"
