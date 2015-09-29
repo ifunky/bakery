@@ -6,8 +6,10 @@ ENV['ENVIRONMENT'] = "vagrant"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.librarian_puppet.puppetfile_dir = "puppet/environments/vagrant"
-
+  config.r10k.puppet_dir = "puppet/environments/vagrant"
+  config.r10k.puppetfile_path = "puppet/environments/vagrant/Puppetfile"
+  config.r10k.module_path = "puppet/environments/vagrant/modules"
+	
   config.vm.define "centos" do |centos|
     centos.vm.hostname = "basecentos"
     centos.vm.box = "centos"
@@ -30,16 +32,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.environment       = ENV['ENVIRONMENT']
       puppet.environment_path  = "puppet/environments"
       puppet.manifests_path    = "puppet/environments/vagrant/manifests"
+	  puppet.module_path	   = "puppet/environments/vagrant/modules"
       puppet.manifest_file     = "default.pp"
       puppet.facter            = {
                                   "instance_base" => "puppetmaster"
                                  }
-
       puppet.options        = ["--verbose"]
-      # --modulepath /vagrant/puppet/modules","--pluginsync",
-      #                         "--verbose","--hiera_config /etc/hiera.yaml", "--environment #{ENV['ENVIRONMENT']}"]
-
-
+	
       centos.vm.synced_folder "puppet", "/etc/puppetlabs/code/environments/vagrant", id: "vagrant-puppet-root"
     end
   end

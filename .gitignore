@@ -12,4 +12,5 @@ Puppetfile .lock
 /*.box
 .vagrant
 /packer_cache/
-
+.tmp/
+modules/

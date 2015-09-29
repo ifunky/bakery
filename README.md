@@ -12,12 +12,14 @@ Currently these scripts are working with the following versions:
  - Vagrant 1.7.4
 
 Prerequisites
- 1. Install git bash 
+ 1. Install git bash (check option to update system PATH)
  2. Install Oracle Virtual Box from https://www.virtualbox.org/wiki/Downloads
- 2. Install Vagrant from http://www.vagrantup.com/downloads.html
- 3. Install the puppet librarian vagrant plugin:
- `$ vagrant plugin install vagrant-librarian-puppet` 
- 
+ 3. Install Vagrant from http://www.vagrantup.com/downloads.html
+ 4. Install Ruby (Use Chocolatey for a quick clean install of 2.1.6 https://chocolatey.org/packages/ruby)
+ 6. Install vagrant plugins: 
+ `$ vagrant plugin install vagrant-r10k` 
+ `$ vagrant plugin install puppet` 
+  
 Creating a Base Centos 7 Box
 -------
 This box will be setup with the following:
@@ -28,7 +30,7 @@ This box will be setup with the following:
  - Selinux disabled
 
  1. Clone the git repo into a folder
- 2. Run BuildCentos7.bat
+ 2. Run BuildCentos7.ps1
  3. After the build has completed you'll find a centos-7.1.box on the root of the bakery folder. 
  
 
