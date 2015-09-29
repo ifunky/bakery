@@ -18,6 +18,7 @@ Prerequisites
  4. Install Ruby (Use Chocolatey for a quick clean install of 2.1.6 https://chocolatey.org/packages/ruby)
  6. Install vagrant plugins: 
  `$ vagrant plugin install vagrant-r10k` 
+ 
  `$ vagrant plugin install puppet` 
   
 Creating a Base Centos 7 Box
@@ -54,4 +55,4 @@ Source        | ISO Checksum (SHA1)
 [MSDN Subscriber Downloads](https://msdn.microsoft.com/subscriptions/json/GetDownloadRequest?brand=MSDN&locale=en-US&fileId=62611&activexDisabled=true&akamaiDL=false)    | 865494E969704BE1C4496D8614314361D025775E
 [180 day Trial](http://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2012-r2)  | 5e2ddcaecc91e80a8ce3ec7ae7838f8a3967ed7f
 
-
+1.  Run BuildWindows2012Server.ps1
