@@ -37,13 +37,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.r10k.module_path = "puppet/environments/vagrant/modules"
 	
   config.vm.define "centos" do |centos|
-    centos.vm.hostname = "basecentos"
-    centos.vm.box = "centos"
+    centos.vm.hostname  = "basecentos"
+    centos.vm.box 		= "centos"
+    centos.vm.box_url   = "centos-7.1.box"
+	centos.ssh.username	= "vagrant"
+	centos.ssh.password	= "vagrant"
+	
     if Vagrant.has_plugin?("vagrant-cachier")
     	centos.cache.scope       = :machine
     	centos.cache.auto_detect = false
     end
-    centos.vm.box_url = "centos-7.1.box"
+
     centos.vm.network "private_network", ip: "192.168.33.11"
 
     centos.vm.provider :virtualbox do |v, override|
