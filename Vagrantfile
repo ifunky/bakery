@@ -62,7 +62,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.environment       = ENV['ENVIRONMENT']
       puppet.environment_path  = "puppet/environments"
       puppet.manifests_path    = "puppet/environments/vagrant/manifests"
-	  puppet.module_path	   = "puppet/environments/vagrant/modules"
+	    puppet.module_path	    = "puppet/environments/vagrant/modules"
       puppet.manifest_file     = "default.pp"
       puppet.facter            = {
                                   "instance_base" => "puppetmaster"
