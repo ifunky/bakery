@@ -32,16 +32,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #  run "mkdir puppet/environments/vagrant/modules"
   #end
 
-  config.r10k.puppet_dir = "puppet/environments/vagrant"
-  config.r10k.puppetfile_path = "puppet/environments/vagrant/Puppetfile"
-  config.r10k.module_path = "puppet/environments/vagrant/modules"
-	
   config.vm.define "centos" do |centos|
     centos.vm.hostname  = "basecentos"
-    centos.vm.box 		= "centos"
+    centos.vm.box 		  = "centos"
     centos.vm.box_url   = "centos-7.1.box"
-	centos.ssh.username	= "vagrant"
-	centos.ssh.password	= "vagrant"
+	  centos.ssh.username	= "vagrant"
+	  centos.ssh.password	= "vagrant"
 	
     if Vagrant.has_plugin?("vagrant-cachier")
     	centos.cache.scope       = :machine
@@ -55,21 +51,47 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         v.customize ["modifyvm", :id, "--memory", 1024]
         v.customize ["modifyvm", :id, "--cpus", 1]
     end
+  end
 
-    centos.vm.provision :puppet do |puppet|
+  config.vm.define "puppetmaster" do |puppetmaster|
+    #config.r10k.puppet_dir = "puppet/environments/vagrant"
+    #config.r10k.puppetfile_path = "puppet/environments/vagrant/Puppetfile"
+    #config.r10k.module_path = "puppet/environments/vagrant/modules"
+
+    puppetmaster.vm.hostname  = "puppetmaster"
+    puppetmaster.vm.box 		  = "centos"
+    puppetmaster.vm.box_url   = "centos-7.1.box"
+    puppetmaster.ssh.username	= "vagrant"
+    puppetmaster.ssh.password	= "vagrant"
+
+    if Vagrant.has_plugin?("vagrant-cachier")
+      centos.cache.scope       = :machine
+      centos.cache.auto_detect = false
+    end
+
+    puppetmaster.vm.network "private_network", ip: "192.168.33.12"
+    puppetmaster.vm.network "forwarded_port", guest: 80, host: 8082, auto_correct: true
+
+    puppetmaster.vm.provider :virtualbox do |v, override|
+      v.gui = true
+      v.customize ["modifyvm", :id, "--memory", 1024]
+      v.customize ["modifyvm", :id, "--cpus", 1]
+    end
+
+    puppetmaster.vm.provision :puppet do |puppet|
       puppet.binary_path       = "/opt/puppetlabs/bin"
-      puppet.hiera_config_path = "puppet/hiera.yaml"
+      #puppet.hiera_config_path = "puppet/hiera.yaml"
       puppet.environment       = ENV['ENVIRONMENT']
       puppet.environment_path  = "puppet/environments"
       puppet.manifests_path    = "puppet/environments/vagrant/manifests"
-	    puppet.module_path	    = "puppet/environments/vagrant/modules"
+      puppet.module_path	     = "puppet/environments/vagrant/modules"
       puppet.manifest_file     = "default.pp"
       puppet.facter            = {
-                                  "instance_base" => "puppetmaster"
-                                 }
+          "instance_base" => "puppetmaster"
+      }
       puppet.options        = ["--verbose"]
-	
-      centos.vm.synced_folder "puppet", "/etc/puppetlabs/code/environments/vagrant", id: "vagrant-puppet-root"
+
+      puppetmaster.vm.synced_folder "puppet", "/etc/puppetlabs/code/environments/vagrant", id: "vagrant-puppet-root"
     end
   end
 

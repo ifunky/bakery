@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Disable IPV6
+#echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
+#echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+
 # Remove Linux headers
 yum -y remove gcc kernel-devel kernel-headers perl cpp
 yum -y clean all
