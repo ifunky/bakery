@@ -54,12 +54,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "puppetmaster" do |puppetmaster|
-    #config.r10k.puppet_dir = "puppet/environments/vagrant"
-    #config.r10k.puppetfile_path = "puppet/environments/vagrant/Puppetfile"
-    #config.r10k.module_path = "puppet/environments/vagrant/modules"
+    puppetmaster.r10k.puppet_dir = "puppet/environments/vagrant"
+    puppetmaster.r10k.puppetfile_path = "puppet/environments/vagrant/Puppetfile"
+    puppetmaster.r10k.module_path = "puppet/environments/vagrant/modules"
 
     puppetmaster.vm.hostname  = "puppetmaster"
-    puppetmaster.vm.box 		  = "centos"
+    puppetmaster.vm.box 		  = "puppetmaster"
     puppetmaster.vm.box_url   = "centos-7.1.box"
     puppetmaster.ssh.username	= "vagrant"
     puppetmaster.ssh.password	= "vagrant"
@@ -70,6 +70,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     puppetmaster.vm.network "private_network", ip: "192.168.33.12"
+    puppetmaster.vm.network "forwarded_port", guest: 8140, host: 8140, auto_correct: true
     puppetmaster.vm.network "forwarded_port", guest: 80, host: 8082, auto_correct: true
 
     puppetmaster.vm.provider :virtualbox do |v, override|
