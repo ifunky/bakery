@@ -1,11 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-begin
-  gem "puppet"
-rescue Gem::LoadError
-  raise "puppet is not installed in vagrant gems! please run 'vagrant plugin install puppet'"
-end
+#begin
+#  gem "puppet"
+#rescue Gem::LoadError
+#  raise "puppet is not installed in vagrant gems! please run 'vagrant plugin install puppet'"
+#end
 
 VAGRANTFILE_API_VERSION = "2"
 ENV['ENVIRONMENT'] = "vagrant"
@@ -15,10 +15,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   required_plugins = %w(vagrant-r10k vagrant-triggers)
   plugin_installed = false
 
-  ## Install Vagrant Plugins
+  ## Install Vagrant Plugins, use non https source as that just causes issues on some Windows setups
   required_plugins.each do |plugin|
     unless Vagrant.has_plugin? plugin
-      system "vagrant plugin install #{plugin}"
+      system "vagrant plugin install #{plugin} --plugin-source http://rubygems.org"
       plugin_installed = true
     end
   end
@@ -79,21 +79,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.customize ["modifyvm", :id, "--cpus", 1]
     end
 
-    puppetmaster.vm.provision :puppet do |puppet|
-      puppet.binary_path       = "/opt/puppetlabs/bin"
-      #puppet.hiera_config_path = "puppet/hiera.yaml"
-      puppet.environment       = ENV['ENVIRONMENT']
-      puppet.environment_path  = "puppet/environments"
-      puppet.manifests_path    = "puppet/environments/vagrant/manifests"
-      puppet.module_path	     = "puppet/environments/vagrant/modules"
-      puppet.manifest_file     = "default.pp"
-      puppet.facter            = {
-          "instance_base" => "puppetmaster"
-      }
-      puppet.options        = ["--verbose"]
+	
+	puppetmaster.vm.provision :puppet do |puppet|
+	  puppet.binary_path       = "/opt/puppetlabs/bin"
+	  #puppet.hiera_config_path = "puppet/hiera.yaml"
+	  puppet.environment       = ENV['ENVIRONMENT']
+	  puppet.environment_path  = "puppet/environments"
+	  puppet.manifests_path    = "puppet/environments/vagrant/manifests"
+	  puppet.module_path	     = "puppet/environments/vagrant/modules"
+	  puppet.manifest_file     = "default.pp"
+	  puppet.facter            = {
+		  "instance_base" => "puppetmaster"
+	  }
+	  puppet.options        = ["--verbose"]
 
-      puppetmaster.vm.synced_folder "puppet", "/etc/puppetlabs/code/environments/vagrant", id: "vagrant-puppet-root"
-    end
+	  puppetmaster.vm.synced_folder "puppet", "/etc/puppetlabs/code/environments/vagrant", id: "vagrant-puppet-root"
+	end
   end
 
   config.vm.define "win2012" do |win2012|
