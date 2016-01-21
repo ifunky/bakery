@@ -1,3 +1,12 @@
 #!/bin/bash
+
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
+if [ ! -z "$http_proxy" ]; then
+    echo "proxy=$http_proxy" >> /etc/yum.conf
+
+    # set global http/https proxy environment variables
+    touch /etc/profile.d/proxy.sh
+    echo "export http_proxy=$http_proxy" >> /etc/profile.d/proxy.sh
+    echo "export https_proxy=$http_proxy" >> /etc/profile.d/proxy.sh
+fi

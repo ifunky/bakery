@@ -44,7 +44,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     	centos.cache.auto_detect = false
     end
 
-    centos.vm.network "private_network", ip: "192.168.33.11"
+    centos.vm.network "private_network", ip: "192.168.33.5"
 
     centos.vm.provider :virtualbox do |v, override|
         v.gui = true

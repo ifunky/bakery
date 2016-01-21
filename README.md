@@ -8,8 +8,8 @@ The "Bakery" is a set of scripts for creating Centos and Windows boxes primarily
 Currently these scripts are working with the following versions:
  - Windows 8.1 (not tested on Windows 10)
  - Packer 0.8.6 (included in source)
- - Virtual Box 5.04
- - Vagrant 1.7.4
+ - Virtual Box 5.0.14
+ - Vagrant 1.8.1
 
 Prerequisites
  1. Install git bash (check option to update system PATH)
