@@ -51,6 +51,8 @@
         "scripts/centos-7.0/update.sh",
         "scripts/centos-7.0/vagrant.sh",
         "scripts/centos-7.0/virtualbox.sh",
+        "scripts/common/ruby210.sh",
+        "scripts/centos-7.0/puppet.sh",
         "scripts/centos-7.0/cleanup.sh"
       ],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
