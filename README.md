@@ -6,21 +6,16 @@ The "Bakery" is a set of scripts for creating Centos and Windows boxes primarily
 
 **Getting started on your Windows Desktop**
 Currently these scripts are working with the following versions:
- - Windows 8.1 (not tested on Windows 10)
+ - Windows Windows 10
  - Packer 0.8.6 (included in source)
- - Virtual Box 5.0.14
- - Vagrant 1.8.1
+ - Virtual Box 5.1.2
+ - Vagrant 1.8.5
 
 Prerequisites
  1. Install git bash (check option to update system PATH)
  2. Install Oracle Virtual Box from https://www.virtualbox.org/wiki/Downloads
  3. Install Vagrant from http://www.vagrantup.com/downloads.html
- 4. Install Ruby (Use Chocolatey for a quick clean install of 2.1.6 https://chocolatey.org/packages/ruby)
- 6. Install vagrant plugins: 
- `$ vagrant plugin install vagrant-r10k` 
- 
- `$ vagrant plugin install puppet` 
-  
+   
 Creating a Base Centos 7 Box
 -------
 This box will be setup with the following:
@@ -100,3 +95,7 @@ For all iso images make sure you update the `iso_checksum` value using the value
 Bake a server! 
 
 1.  Run BuildWindows2012Server.ps1
+
+Spin it up
+
+1. vagrant up win2012
