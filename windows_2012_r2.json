@@ -45,6 +45,14 @@
       "elevated_password": "vagrant"
     },
     {
+      "type": "powershell",
+      "scripts": [
+        "scripts/windows/win-updates.ps1"
+      ],
+      "elevated_user": "vagrant",
+      "elevated_password": "vagrant"
+    },
+    {
       "type": "windows-restart"
     },
     {
