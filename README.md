@@ -7,8 +7,8 @@ The "Bakery" is a set of scripts for creating Centos and Windows boxes primarily
 **Getting started on your Windows Desktop**
 Currently these scripts are working with the following versions:
  - Windows Windows 10
- - Packer 0.8.6 (included in source)
- - Virtual Box 5.1.2
+ - Packer 0.10.1 (included in source)
+ - Virtual Box 5.1.4
  - Vagrant 1.8.5
 
 Prerequisites

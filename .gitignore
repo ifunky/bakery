@@ -14,3 +14,4 @@ Puppetfile .lock
 /packer_cache/
 .tmp/
 modules/
+*.log

@@ -11,7 +11,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-   config.vm.define "centos" do |centos|
+  config.vm.define "centos" do |centos|
     centos.vm.hostname  = "basecentos"
     centos.vm.box 		  = "centos"
     centos.vm.box_url   = "centos-7.1.box"
@@ -46,11 +46,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     win2012.vm.hostname = "windows2012"
     win2012.vm.box = "windows2012"
     win2012.vm.box_url = "windows_2012_r2_virtualbox.box"
-    if Vagrant.has_plugin?("vagrant-cachier")
-      win2012.cache.scope       = :machine
-      win2012.cache.auto_detect = false
-    end
-
     win2012.vm.network "private_network", ip: "192.168.33.12"
 
     win2012.vm.provider :virtualbox do |v, override|
