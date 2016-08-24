@@ -6,7 +6,7 @@
       "iso_url": "iso/en_windows_server_2012_r2_with_update_x64_dvd_6052708.iso",
       "iso_checksum_type": "SHA1",
       "iso_checksum": "865494E969704BE1C4496D8614314361D025775E",
-      "headless": false,
+      "headless": true,
       "boot_wait": "2m",
       "communicator": "winrm",
       "winrm_username": "vagrant",
@@ -48,6 +48,14 @@
       "type": "powershell",
       "scripts": [
         "scripts/windows/guest-additions.ps1"
+      ],
+      "elevated_user": "vagrant",
+      "elevated_password": "vagrant"
+    },
+    {
+      "type": "powershell",
+      "scripts": [
+        "scripts/windows/win-updates.ps1"
       ],
       "elevated_user": "vagrant",
       "elevated_password": "vagrant"
