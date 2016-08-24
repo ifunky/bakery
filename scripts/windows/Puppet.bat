@@ -4,4 +4,4 @@ if not exist "C:\Windows\Temp\puppet.msi" (
 
 
 :: http://docs.puppetlabs.com/pe/latest/install_windows.html
-msiexec /qn /i C:\Windows\Temp\puppet.msi PUPPET_MASTER_SERVER=puppet.local PUPPET_AGENT_ENVIRONMENT=vagrant /log C:\Windows\Temp\puppet.log
+msiexec /qn /i C:\Windows\Temp\puppet.msi PUPPET_MASTER_SERVER=puppet.local PUPPET_AGENT_ENVIRONMENT=local /log C:\Windows\Temp\puppet.log
