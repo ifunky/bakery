@@ -14,9 +14,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "centos" do |centos|
     centos.vm.hostname  = "basecentos"
     centos.vm.box 		  = "centos"
-    centos.vm.box_url   = "centos-7.1.box"
-	  centos.ssh.username	= "vagrant"
-	  centos.ssh.password	= "vagrant"
+    centos.vm.box_url   = "centos-7.3.box"
+	  #centos.ssh.username	= "vagrant"
+	  #centos.ssh.password	= "vagrant"
 	
     if Vagrant.has_plugin?("vagrant-cachier")
     	centos.cache.scope       = :machine
