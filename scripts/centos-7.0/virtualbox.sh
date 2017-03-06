@@ -1,5 +1,8 @@
 #!/bin/sh
 
+#  Install pre-reqs for virtualbox
+yum install -y bzip2 gcc kernel-devel kernel-headers
+
 mount -o loop /home/vagrant/VBoxGuestAdditions.iso /mnt
 /mnt/VBoxLinuxAdditions.run --nox11
 umount /mnt
