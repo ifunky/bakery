@@ -1,4 +1,4 @@
-# Centos build csript
+# Centos build script
 
 $env:PACKER_LOG="1"
 $env:PACKER_LOG_PATH="centos-7.3.log"
