@@ -21,7 +21,7 @@ if [ "$INSTALL_VAGRANT_KEY" = "true" ] || [ "$INSTALL_VAGRANT_KEY" = "1" ]; then
       echo "${SSH_USER}        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
   fi
 
-  echo '==> Installing Vagrant SSH key'
+  echo "==> Installing Vagrant SSH key in ${SSH_USER_HOME}"
   mkdir -pm 700 ${SSH_USER_HOME}/.ssh
   # https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub
   echo "${VAGRANT_INSECURE_KEY}" > $SSH_USER_HOME/.ssh/authorized_keys

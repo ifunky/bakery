@@ -3,5 +3,5 @@
 Remove-Item output-virtualbox-iso -Force -Recurse -ErrorAction Ignore
 
 $env:PACKER_LOG="1"
-$env:PACKER_LOG_PATH="centos-7.3.log"
-packer\packer.exe build centos-7.3.json
+$env:PACKER_LOG_PATH="centos-7.1.log"
+packer\packer.exe build centos-7.0.json
