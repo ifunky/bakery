@@ -12,6 +12,7 @@
 	  "ssh_pty" : "true",	  
       "ssh_wait_timeout": "1h",
       "headless": "false",
+      "disk_size": "40000",
       "vboxmanage": [
         [
           "modifyvm",

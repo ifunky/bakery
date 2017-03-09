@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #  Install pre-reqs for virtualbox
-yum install -y bzip2 gcc kernel-devel kernel-headers perl cpp
+yum install -y bzip2 gcc kernel-devel kernel-headers perl cpp make
 
 mount -o loop /home/vagrant/VBoxGuestAdditions.iso /mnt
 /mnt/VBoxLinuxAdditions.run --nox11
