@@ -7,7 +7,7 @@ The "Bakery" is a set of scripts for creating Centos and Windows boxes primarily
 Currently these scripts are working with the following versions:
  - Windows Windows 8 and 10
  - Packer 0.12.3 (included in source)
- - Virtual Box 5.1.4
+ - Virtual Box 5.1.28
  - Vagrant 1.9.2
 
 Prerequisites
@@ -37,6 +37,15 @@ From the bakery folder in a **git bash command prompt**:
  1. `$ vagrant up centos`
  2. `$ vagrant ssh centos`
  3. At this point you should have a shell in the new server!
+
+Create a Windows 2016 Core/Standard Virtual Box
+------------------------------------
+
+This box will be setup with the following:
+- Windows 2016 Core or Standard
+- Puppet Agent 5.3.2
+
+Just run the appropriate BuildWindows2016Core.ps1 or BuildWindows2016Standard.ps1 script   
 
 Create a Windows 2012 R2 Virtual Box
 ------------------------------------
