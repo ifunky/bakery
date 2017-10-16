@@ -3,15 +3,15 @@
   "builders": [
     {
       "type": "virtualbox-iso",
-      "iso_url": "iso/en_windows_server_2012_r2_with_update_x64_dvd_6052708.iso",
-      "iso_checksum_type": "SHA1",
-      "iso_checksum": "865494E969704BE1C4496D8614314361D025775E",
+      "iso_url": "http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO",
+      "iso_checksum_type": "md5",
+      "iso_checksum": "5b5e08c490ad16b59b1d9fab0def883a",
       "headless": true,
       "boot_wait": "2m",
       "communicator": "winrm",
       "winrm_username": "vagrant",
 	  "winrm_password": "vagrant",
-	  "winrm_timeout": "45m",
+	  "winrm_timeout": "150m",
       "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
       "guest_os_type": "Windows2012_64",
       "guest_additions_mode": "attach",
@@ -53,21 +53,13 @@
       "elevated_password": "vagrant"
     },
     {
-      "type": "powershell",
-      "scripts": [
-        "scripts/windows/win-updates.ps1"
-      ],
-      "elevated_user": "vagrant",
-      "elevated_password": "vagrant"
-    },
-    {
       "type": "windows-restart"
     },
     {
       "type": "powershell",
-      "pause_before": "40s",
+      "valid_exit_codes": [0,1,259],
       "scripts": [
-        "scripts/windows/cleanup.ps1"
+        "scripts/windows/win-updates.ps1"
       ],
       "elevated_user": "vagrant",
       "elevated_password": "vagrant"

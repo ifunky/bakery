@@ -1,15 +1,14 @@
-
-Windows and Centos Bakery for Puppet 4.0
-----------------------------------------
+Windows and Centos Bakery for Puppet 4
+--------------------------------------
 
 The "Bakery" is a set of scripts for creating Centos and Windows boxes primarily designed for developing locally with Puppet  and Windows.  This initial version will use traditional virtual boxes but going forward I'll convert these to use docker.
 
 **Getting started on your Windows Desktop**
 Currently these scripts are working with the following versions:
- - Windows Windows 10
- - Packer 0.10.1 (included in source)
+ - Windows Windows 8 and 10
+ - Packer 0.12.3 (included in source)
  - Virtual Box 5.1.4
- - Vagrant 1.8.5
+ - Vagrant 1.9.2
 
 Prerequisites
  1. Install git bash (check option to update system PATH)
@@ -20,9 +19,9 @@ Creating a Base Centos 7 Box
 -------
 This box will be setup with the following:
 
- - Centos 7
- - Ruby 2.1.0
- - Puppet agent 4.0
+ - Centos 7.3
+ - Ruby 2.0.0p648
+ - Puppet agent 4.9.3
  - Selinux disabled
 
  1. Clone the git repo into a folder
@@ -45,6 +44,7 @@ Create a Windows 2012 R2 Virtual Box
 This box will be setup with the following:
 - Windows 2012 R2
 - Powershell 5
+- Puppet Agent 1.9.3
 
 Before you get started you're going to need an iso image which you'll copy into the /iso folder.  
 

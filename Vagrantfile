@@ -30,23 +30,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define "win2012" do |win2012|
+  config.vm.define "windows" do |windows|
 
-    win2012.vm.communicator = "winrm"
-    win2012.winrm.username = "vagrant"
-    win2012.winrm.password = "vagrant"
+    windows.vm.communicator = "winrm"
+    windows.winrm.username = "vagrant"
+    windows.winrm.password = "vagrant"
 
-    win2012.vm.guest = :windows
-    win2012.windows.halt_timeout = 15
+    windows.vm.guest = :windows
+    windows.windows.halt_timeout = 15
 
     config.vm.network :forwarded_port, guest: 3389, host: 3389, id: "rdp", auto_correct: true
 
-    win2012.vm.hostname = "windows2012"
-    win2012.vm.box = "windows2012"
-    win2012.vm.box_url = "windows_2012_r2_virtualbox.box"
-    win2012.vm.network "private_network", ip: "192.168.33.12"
+    windows.vm.hostname = "windows2016Core"
+    windows.vm.box = "windows2016Core"
+    windows.vm.box_url = "dangibbons/windows2016core"
+    windows.vm.network "private_network", ip: "192.168.33.12"
 
-    win2012.vm.provider :virtualbox do |v, override|
+    windows.vm.provider :virtualbox do |v, override|
       v.gui = true
       v.customize ["modifyvm", :id, "--memory", 2024]
       v.customize ["modifyvm", :id, "--cpus", 2]

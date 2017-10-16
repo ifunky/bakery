@@ -63,7 +63,6 @@
             </ImageInstall>
             <UserData>
                 <ProductKey>
-                    <Key>8GNKJ-XCVK6-QW96X-7JTFY-HT8FY</Key>
                     <WillShowUI>OnError</WillShowUI>
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
@@ -237,7 +236,7 @@
                     <Description>Disable windows firewall</Description>
                 </SynchronousCommand>
 
-                <!-- WITH WINDOWS UPDATES
+                <!-- WITH WINDOWS
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd.exe /c a:\microsoft-updates.bat</CommandLine>
                     <Order>98</Order>
@@ -249,7 +248,7 @@
                     <Order>100</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
-                 END WITH WINDOWS UPDATES -->
+    UPDATES -->
             </FirstLogonCommands>
             <OOBE>
                 <HideEULAPage>true</HideEULAPage>
