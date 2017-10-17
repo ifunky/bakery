@@ -1,9 +1,9 @@
 {
   "builders": [
     {
-      "vm_name": "centos7.3",
+      "vm_name": "centos7.4",
       "guest_os_type": "RedHat_64",
-      "iso_checksum_type": "md5",
+      "iso_checksum_type": "sha256",
       "iso_checksum": "{{ user `iso_checksum` }}",
       "iso_url": "{{ user `iso_url` }}",
       "type": "virtualbox-iso",
@@ -71,8 +71,8 @@
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
-    "iso_checksum": "d2ec6cfa7cf6d89e484aa2d9f830517c",
-    "iso_url": "http://mirror.bytemark.co.uk/centos/7.3.1611/isos/x86_64/CentOS-7-x86_64-Minimal-1611.iso",
+    "iso_checksum": "bba314624956961a2ea31dd460cd860a77911c1e0a56e4820a12b9c5dad363f5",
+    "iso_url": "http://mirror.bytemark.co.uk/centos/7.4.1708/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso",
     "no_proxy": "{{env `no_proxy`}}",
     "rsync_proxy": "{{env `rsync_proxy`}}",
     "ssh_password": "vagrant",
@@ -85,7 +85,7 @@
     {
       "type": "vagrant",
       "compression_level": 9,
-      "output": "centos-7.3.box"
+      "output": "centos-7.4.box"
     }
   ]
 }

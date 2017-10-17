@@ -13,8 +13,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "centos" do |centos|
     centos.vm.hostname  = "basecentos"
-    centos.vm.box 		  = "centos"
-    centos.vm.box_url   = "centos-7.3.box"
+    centos.vm.box 		  = "centos74"
+    centos.vm.box_url   = "centos-7.4.box"
 
     if Vagrant.has_plugin?("vagrant-cachier")
     	centos.cache.scope       = :machine
@@ -41,9 +41,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.network :forwarded_port, guest: 3389, host: 3389, id: "rdp", auto_correct: true
 
-    windows.vm.hostname = "windows2016Core"
-    windows.vm.box = "windows2016Core"
-    windows.vm.box_url = "dangibbons/windows2016core"
+    windows.vm.hostname = "windows2016"
+    windows.vm.box = "windows2016Standard"
+    windows.vm.box_url = "windows_2016_standard_virtualbox.box"
     windows.vm.network "private_network", ip: "192.168.33.12"
 
     windows.vm.provider :virtualbox do |v, override|

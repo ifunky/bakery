@@ -14,3 +14,12 @@ fi
 if [ ! -z "$no_proxy" ]; then
     echo "export no_proxy=$no_proxy" >> /etc/profile.d/proxy.sh
 fi
+
+yum update -y
+
+yum -y install epel-release
+yum -y --enablerepo epel install dkms
+
+echo "Rebooting..."
+reboot
+exit 0
