@@ -58,9 +58,6 @@
       "script": "./scripts/windows/win-updates.ps1"
     },
     {
-      "type": "windows-restart"
-    },
-    {
       "type": "powershell",
       "elevated_user": "vagrant",
       "elevated_password": "vagrant",
@@ -72,7 +69,7 @@
     {
       "type": "vagrant",
       "keep_input_artifact": false,
-      "output": "windows_2016_core_{{.Provider}}.box"
+      "output": "windows_2016_standard_{{.Provider}}.box"
     }
   ]
 }
