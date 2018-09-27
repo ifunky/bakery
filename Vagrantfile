@@ -41,9 +41,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.network :forwarded_port, guest: 3389, host: 3389, id: "rdp", auto_correct: true
 
-    windows.vm.hostname = "windows2016Core"
-    windows.vm.box = "windows2016Core"
-    windows.vm.box_url = "dangibbons/windows2016core"
+    windows.vm.hostname = "windows2016"
+    windows.vm.box = "windows2016"
+    #windows.vm.box_version = "1.0.0"
+    windows.vm.box_url = "c:/projects/ifunky/bakery/windows_2016_standard_virtualbox.box"
     windows.vm.network "private_network", ip: "192.168.33.12"
 
     windows.vm.provider :virtualbox do |v, override|

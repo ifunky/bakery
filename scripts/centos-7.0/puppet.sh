@@ -1,5 +1,5 @@
 #!/bin/bash
-rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+rpm -Uvh https://yum.puppet.com/puppet5/puppet5-release-el-7.noarch.rpm
 yum -y install puppet-agent
 
 # Add puppet bin path to global profile for all users
