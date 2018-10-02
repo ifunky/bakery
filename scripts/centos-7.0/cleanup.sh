@@ -1,10 +1,9 @@
 #!/bin/sh
 
-# Disable IPV6
-#echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
-#echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-
 yum -y clean all
+
+# clean history
+history -c
 
 # Cleanup log files
 find /var/log -type f | while read f; do echo -ne '' > $f; done;
