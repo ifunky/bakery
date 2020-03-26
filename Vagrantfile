@@ -11,18 +11,6 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.define "devdocker" do |a|
-    a.vm.provider "docker" do |d|
-      d.build_dir = "."
-      #d.image = "centos"
-      d.force_host_vm = false
-      d.has_ssh = true
-      d.cmd = ["tail", "-f"]
-      d.remains_running = true
-    end
-  end
-
-
   config.vm.define "centos" do |centos|
     centos.vm.hostname  = "basecentos"
     centos.vm.box 		  = "centos74"

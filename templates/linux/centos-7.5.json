@@ -1,0 +1,88 @@
+{
+  "builders": [
+    {
+      "type": "hyperv-iso",
+      "vm_name": "centos75-g2",
+      "temp_path": ".",
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum_type": "sha1",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "disk_size": "30000",
+      "disk_block_size": "1",
+      "communicator": "ssh",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_timeout" : "4h",
+      "shutdown_timeout": "30m",
+      "shutdown_command": "echo 'password' | sudo -S shutdown -P now",
+      "ram_size": 4096,
+      "enable_dynamic_memory": "true",
+      "cpu": 4,
+      "generation": 1,
+      "switch_name": "{{user `switch_name`}}",
+      "vlan_id": "{{user `vlan_id`}}",
+      "boot_wait": "5s",
+      "floppy_files": ["http/ks.cfg"],
+      "boot_command": [
+        "<tab> text inst.ks=hd:fd0:/ks.cfg <enter><wait>"
+      ],
+      "guest_additions_mode":"disable",
+      "enable_secure_boot": false,
+      "output_directory": "output-centos7"
+    }
+
+  ],
+  "provisioners": [
+    {
+		"environment_vars": [
+            "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
+            "SSH_USERNAME={{user `ssh_username`}}",
+            "SSH_PASSWORD={{user `ssh_password`}}",
+			"http_proxy={{user `http_proxy`}}",
+			"https_proxy={{user `https_proxy`}}",
+			"ftp_proxy={{user `ftp_proxy`}}",
+			"rsync_proxy={{user `rsync_proxy`}}",
+			"no_proxy={{user `no_proxy`}}"
+		],
+      "type": "shell",
+
+      "scripts": [
+        "scripts/centos-7.0/base.sh",
+        "scripts/centos-7.0/vagrant.sh",
+        "scripts/centos-7.0/virtualbox.sh",
+        "scripts/common/ruby210.sh",
+        "scripts/centos-7.0/cleanup.sh"
+      ],
+      "expect_disconnect": true,
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+    }
+  ],
+  "variables": {
+    "cleanup_pause": "",
+    "cm": "nocm",
+    "cm_version": "",
+    "ftp_proxy": "{{env `ftp_proxy`}}",
+    "headless": "",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "install_vagrant_key": "true",
+    "iso_checksum": "13675c6f74880e7ff3481b91bdaf925ce81bda8f",
+    "iso_url": "http://mirrors.mit.edu/centos/7.5.1804/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso",
+    "no_proxy": "{{env `no_proxy`}}",
+    "rsync_proxy": "{{env `rsync_proxy`}}",
+    "ssh_password": "vagrant",
+    "ssh_username": "vagrant",
+    "update": "false",
+    "version": "0.1.1",
+    "switch_name": "internal_vSwitch",
+    "vlan_id": "0"
+  }  
+  ,
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "compression_level": 9,
+      "output": "centos-7.3-{{.Provider}}.box"
+    }
+  ]
+}

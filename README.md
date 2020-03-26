@@ -1,110 +1,151 @@
-Windows and Centos Bakery for Puppet 4
---------------------------------------
+# iFunky Cloud AWS Bakery
 
-The "Bakery" is a set of scripts for creating Centos and Windows boxes primarily designed for developing locally with Puppet  and Windows.  This initial version will use traditional virtual boxes but going forward I'll convert these to use docker.
+The bakery is the place to bake AMIs :-) Using Packer we can create baseline images for Windows and Linux.  
 
-**Getting started on your Windows Desktop**
-Currently these scripts are working with the following versions:
- - Windows Windows 8 and 10
- - Packer 0.12.3 (included in source)
- - Virtual Box 5.1.28
- - Vagrant 1.9.2
+## Windows
 
-Prerequisites
- 1. Install git bash (check option to update system PATH)
- 2. Install Oracle Virtual Box from https://www.virtualbox.org/wiki/Downloads
- 3. Install Vagrant from http://www.vagrantup.com/downloads.html
-   
-Creating a Base Centos 7 Box
--------
-This box will be setup with the following:
+All windows servers are configured with Microsoft Security Compliance Toolkit: https://docs.microsoft.com/en-us/windows/security/threat-protection/security-compliance-toolkit-10
 
- - Centos 7.3
- - Ruby 2.0.0p648
- - Puppet agent 4.9.3
- - Selinux disabled
+To see the latest AWS Windows AMIs with patches see here: https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/windows-ami-version-history.html#amis-2019
 
- 1. Clone the git repo into a folder
- 2. Run BuildCentos7.ps1
- 3. After the build has completed you'll find a centos-7.1.box on the root of the bakery folder. 
- 
+### Base Server
 
-SSH To The Centos Box
----------------------
-If you want to easily get onto the box there is a vagrant file already created.   
-From the bakery folder in a **git bash command prompt**:
+- Windows 2019 server with latest Microsoft updates installed
+- AWS Agent Service (security CVE scanning)
+- D: "data" drive
+- Security hardened
+- Minimal install
+- Windows Updates disabled
 
- 1. `$ vagrant up centos`
- 2. `$ vagrant ssh centos`
- 3. At this point you should have a shell in the new server!
+### Web Server
 
-Create a Windows 2016 Core/Standard Virtual Box
-------------------------------------
+- Windows 2019 web server with latest Microsoft updates installed
+- AWS Agent Service (security CVE scanning)
+- IIS installed and configured with the .NET Core Hosting Bundle
+- D: "data" drive
+- Security hardened
+- Windows Updates disabled (for enterprises that control the rollout out of updates)
 
-This box will be setup with the following:
-- Windows 2016 Core or Standard
-- Puppet Agent 5.3.2
+### Windows Sysprep
 
-Just run the appropriate BuildWindows2016Core.ps1 or BuildWindows2016Standard.ps1 script   
+All Windows images are run the EC2 sysprep command which will set a new random password which is retrievable via the console.
 
-Create a Windows 2012 R2 Virtual Box
-------------------------------------
+An `unattend.xml` file is uploaded to the target server which contains information used in the sysprep process and this is where the system locale is set to `en-GB`.
+For more detailed information see the AWS Windows guide: [https://docs.aws.amazon.com/en_pv/AWSEC2/latest/WindowsGuide/ami-create-standard.html](https://docs.aws.amazon.com/en_pv/AWSEC2/latest/WindowsGuide/ami-create-standard.html)
 
-This box will be setup with the following:
-- Windows 2012 R2
-- Powershell 5
-- Puppet Agent 1.9.3
+__NOTE:__ It is advisable to perform a system restart just before running the sysprep commands as it will hang if a reboot is pending from earlier scripts.
 
-Before you get started you're going to need an iso image which you'll copy into the /iso folder.  
+## Linux
 
-**Windows 2012 ISO Sources**
+### Ubuntu 18.04
 
-Source        | ISO Checksum (SHA1)
-------------- | -------------------
-[MSDN Subscriber Downloads](https://msdn.microsoft.com/subscriptions/json/GetDownloadRequest?brand=MSDN&locale=en-US&fileId=62611&activexDisabled=true&akamaiDL=false)    | 865494E969704BE1C4496D8614314361D025775E
-[180 day Trial](http://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2012-r2)  | 5e2ddcaecc91e80a8ce3ec7ae7838f8a3967ed7f
+- Latest updates
 
-Configure Keys and ISO Locations
-------------------------------------
-**Trial ISO**
+  ------
 
-If you are using the trial you can modify the windows_2012_r2.json template with the following line:
-`"iso_url": "http://care.dlservice.microsoft.com/dl/download/6/2/A/62A76ABB-9990-4EFC-A4FE-C7D698DAEB96/9600.17050.WINBLUE_REFRESH.140317-1640_X64FRE_SERVER_EVAL_EN-US-IR3_SSS_X64FREE_EN-US_DV9.ISO"`
+  
 
-In order for the trial to work make sure answer_files\2012_r2Autoattend.xml has a blank product key by commenting it out:
-`<UserData>
-    <ProductKey>
-         <!--<Key></Key>-->
-         <WillShowUI>OnError</WillShowUI>
-     </ProductKey>
-     <AcceptEula>true</AcceptEula>
-     <FullName>Vagrant</FullName>
-     <Organization>Vagrant</Organization>
-</UserData>`
 
-**MSDN Subscriber ISO**
+## Building AMIs
 
-If you have downloaded a MSDN subscriber iso then make sure the windows_2012_r2.json template contains the correct iso path:
-`"iso_url": "iso/en_windows_server_2012_r2_with_update_x64_dvd_6052708.iso"`
+The Bakery contains a Makefile with targets that are designed to be used within an automation tool or optionally can also be run from your local desktop.
 
-Update answer_files\2012_r2Autoattend.xml with your product key:
-`<UserData>
-    <ProductKey>
-         <Key>ABCDE-AB9TW-ABW8V-AB6H7-AB3WM</Key>
-         <WillShowUI>OnError</WillShowUI>
-     </ProductKey>
-     <AcceptEula>true</AcceptEula>
-     <FullName>Vagrant</FullName>
-     <Organization>Vagrant</Organization>
-</UserData>`
+### Prerequisites
+Our recommended best practice approach is to use AWS Users, Roles and Groups along with `aws-vault` from your desktop which provides better security (no clear text keys) and makes it easy to assume IAM roles.
 
-**ISO Checksum (subscriber and trial)**
-For all iso images make sure you update the `iso_checksum` value using the values in the table above.
+- Follow Amazons best practice guide here to setup your IAM Roles: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html
+- The following environment variables are required to be set:
 
-Bake a server! 
+````bash
+export AWS_PROFILE=my-aws-creds
+export REGION=eu-west-1
+export VPC_NAME=MY-VPC
+export SUBNET_NAME=My-Subnet
+export DESTINATION_REGIONS=eu-west-1, us-west-1       # List of regions to copy the iamge
+````
+__NOTE:__ *VPC and SUBNETS use a name not ID!*
 
-1.  Run BuildWindows2012Server.ps1
+#### **Running The Bakery From Your Local Desktop**
 
-Spin it up
+The Bakery is designed to be used with Docker so no local installation of Packer is required - just an image with with the correct Packer version :-)
 
-1. vagrant up win2012
+1. Install and configure `aws-vault` from here: https://github.com/99designs/aws-vault
+
+2. Once configured you should have something like this in your `/.aws/config`file:
+
+```ini
+   [profile ifunky-ro]
+   region=eu-west-1
+       
+   [profile ifunky-prod]
+   source_profile=ifunky-ro
+   region=eu-west-1
+   role_arn=arn:aws:iam::1235467890:role/account_admins
+```
+3. Running Packer
+
+
+````bash
+$ make build/ubuntu1804
+
+# Or build Windows, for example
+$ make build/windowsweb
+````
+
+## Finding AMIs
+
+To find suitable AMIs use the AWS CLI to query images.
+
+```bash
+
+aws ec2 describe-images --owners self amazon --filters "Name=name,Values=Windows_Server-2019-English-Full-Base-20*"
+
+```
+
+### Long AMI Builds
+
+If you need to run a long AMI build the default assume session role is 1h, if you need longer use the --no-session:
+
+```bash
+
+@aws-vault exec --assume-role-ttl 4h --no-session {your_profile} -- ./packer build windows_2019_simple.json
+
+```
+
+### Automated Builds - Extracting the AMI ID
+
+This solution has been designed to be integrated into external tooling and each run of an AMI build will create a manifest file which will contain the new AMI ID which can be extracted if you need to take further actions on your new image.
+
+Use the following example in your script:
+
+````bash
+MANIFEST_NAME="my-server-template.manifest"
+AMI_ID=$(egrep -m1 -oe 'ami-.{8}' $MANIFEST_NAME)
+
+````
+
+
+## Makefile Targets
+
+The following targets are available which are used to build servers:
+
+```bash
+build/ubuntu 		Build Ubuntu 18.04 AMI
+build/windowsbase 	Build Windows 2019 base AMI - no services
+build/windowsweb 	Build Windows 2019 AMI with IIS installed
+
+```
+
+------
+
+
+
+## License
+
+Apache 2 Licensed. See LICENSE for full details.
+
+```
+
+```
+
+```

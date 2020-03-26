@@ -1,0 +1,63 @@
+<powershell>
+# Set administrator password
+net user Administrator SuperS3cr3t!
+wmic useraccount where "name='Administrator'" set PasswordExpires=FALSE
+
+# First, make sure WinRM can't be connected to
+netsh advfirewall firewall set rule name="Windows Remote Management (HTTP-In)" new enable=yes action=block
+
+# Delete any existing WinRM listeners
+winrm delete winrm/config/listener?Address=*+Transport=HTTP  2>$Null
+winrm delete winrm/config/listener?Address=*+Transport=HTTPS 2>$Null
+
+
+$Cert = New-SelfSignedCertificate -CertstoreLocation Cert:\LocalMachine\My -DnsName "packer"
+New-Item -Path WSMan:\LocalHost\Listener -Transport HTTPS -Address * -CertificateThumbPrint $Cert.Thumbprint -Force
+
+# WinRM
+write-output "Setting up WinRM"
+write-host "(host) setting up WinRM"
+
+# Create a new WinRM listener and configure
+winrm create winrm/config/Listener?Address=*+Transport=HTTPS
+winrm set winrm/config/winrs '@{MaxMemoryPerShellMB="2048"}'
+winrm set winrm/config '@{MaxTimeoutms="7200000"}'
+winrm set winrm/config/service '@{AllowUnencrypted="false"}'
+winrm set winrm/config/client '@{AllowUnencrypted="false"}'
+winrm set winrm/config/service '@{MaxConcurrentOperationsPerUser="12000"}'
+winrm set winrm/config/client/auth '@{Basic="false"}'
+winrm set winrm/config/service/auth '@{Basic="false"}'
+winrm set winrm/config/service/auth '@{Kerberos="true"}'
+winrm set winrm/config/service/auth '@{Negotiate="true"}'
+winrm set winrm/config/service/auth '@{CredSSP="true"}'
+winrm set winrm/config/Listener?Address=*+Transport=HTTPS "@{Port=`"5986`";Hostname=`"packer`";CertificateThumbprint=`"$($Cert.Thumbprint)`"}"
+
+netsh advfirewall firewall add rule name="WinRM 5985" dir=in action=allow protocol=TCP localport=5985
+netsh advfirewall firewall add rule name="WinRM Port 5986" dir=in action=allow protocol=TCP localport=5986
+
+netsh advfirewall firewall add rule name="RDP" dir=in action=allow protocol=TCP localport=3389
+
+# Configure UAC to allow privilege elevation in remote shells
+$Key = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+$Setting = 'LocalAccountTokenFilterPolicy'
+Set-ItemProperty -Path $Key -Name $Setting -Value 1 -Force
+
+# Configure and restart the WinRM Service; Enable the required firewall exception
+Stop-Service -Name WinRM
+Set-Service -Name WinRM -StartupType Automatic
+netsh advfirewall firewall set rule name="Windows Remote Management (HTTP-In)" new action=allow localip=any remoteip=any
+Start-Service -Name WinRM
+
+
+Start-Service smphost
+
+# Show disks
+Get-Disk
+
+# Initialise all new disks to GPT
+Get-Disk | Where partitionstyle -eq ‘raw’ | Initialize-Disk -PartitionStyle GPT
+
+# Set up the D Data drive
+Get-disk | Where-Object Number -Eq "1" | New-Partition -DriveLetter D  -UseMaximumSize | Format-Volume -NewFileSystemLabel "Data" -confirm:$false
+
+</powershell>

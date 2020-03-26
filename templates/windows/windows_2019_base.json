@@ -1,0 +1,134 @@
+{
+    "variables": {
+      "region": "",
+      "vpc_name": "",
+      "subnet_name": "",
+      "destination_regions": "",
+      "template_name": "windows_2019_base"
+    },  
+    "min_packer_version": "1.4.2",
+    "builders": [
+      {
+        "ami_description": "Base Windows 2019 V1.0",
+        "ami_name": "win2019-base-server-1.0.{{isotime \"200601021504\"}}",
+        "communicator": "winrm",
+        "user_data_file": "scripts/windows/bootstrap.txt",
+        "winrm_username": "Administrator",
+        "winrm_password": "SuperS3cr3t!",  
+        "winrm_use_ntlm": "true",  
+        "winrm_insecure": "true",  
+        "winrm_use_ssl": "true",  
+        "ebs_optimized": true,
+        "ena_support": true,
+        "sriov_support": true,
+        "instance_type": "t3a.medium",
+        "ami_regions": "{{user `destination_regions`}}",
+        "region": "{{user `region`}}",
+        "launch_block_device_mappings" : [
+          {
+             "device_name" : "/dev/sda1",
+             "delete_on_termination" : true,
+             "volume_size" : 60,
+             "volume_type" : "gp2"
+          },
+          {
+            "encrypted" : false,
+            "device_name" : "xvdf",
+             "volume_size" : 50,
+             "delete_on_termination" : true,
+             "volume_type" : "gp2"
+          }    
+       ],
+       "ami_block_device_mappings" : [
+          {
+            "encrypted" : false,
+            "device_name" : "xvdf",
+             "volume_size" : 60,
+             "delete_on_termination" : true,
+             "volume_type" : "gp2"
+          }
+        ],     
+        "vpc_filter": {
+          "filters": {
+            "tag:Name": "{{user `vpc_name`}}",
+            "isDefault": "false"
+          }
+        },
+        "subnet_filter": {
+          "filters": {
+            "tag:Name": "{{user `subnet_name`}}"
+          },
+          "random": true
+      },                     
+        "source_ami_filter": {
+          "filters": {
+            "virtualization-type": "hvm",
+            "name": "Windows_Server-2019-English-Full-Base-20*",
+            "root-device-type": "ebs"
+          },
+          "owners": [
+            "amazon"
+          ],
+          "most_recent": true
+        },
+        "tags": {},
+        "type": "amazon-ebs"
+      }
+    ],
+    "provisioners": [
+      {
+        "type": "file",
+        "source": "Windows2019SecurityBaseline.zip",
+        "destination": "C:\\Windows\\Temp\\Windows2019SecurityBaseline.zip",
+        "direction": "upload"
+      },   
+      {
+        "type": "file",
+        "source": "scripts/windows/unattend.xml",
+        "destination": "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Sysprep\\Unattend.xml",
+        "direction": "upload"
+      }, 
+      {
+        "type": "powershell",
+        "scripts": [
+          "scripts/windows/init.ps1",
+          "scripts/windows/choco.ps1",
+          "scripts/windows/software.ps1",
+          "scripts/windows/dotnetcore.ps1",
+          "scripts/windows/create-data-drive.ps1"
+        ]
+      },
+      {
+        "type": "windows-update"
+      },      
+      {
+        "type": "windows-restart"
+      },      
+      {
+        "type": "powershell",
+        "scripts": [
+          "scripts/windows/disable-windows-updates.ps1",
+          "scripts/windows/os-hardening.ps1",
+          "scripts/windows/optimise.ps1",
+          "scripts/windows/cleanup.ps1"
+        ]
+      },   
+      {
+        "type": "windows-restart"
+      },    
+      {
+        "type": "powershell",
+        "inline": [
+        "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\InitializeInstance.ps1 -Schedule",
+        "C:\\ProgramData\\Amazon\\EC2-Windows\\Launch\\Scripts\\SysprepInstance.ps1 -NoShutdown"
+        ]
+      }
+    ],
+    "post-processors": [
+      {
+        "type": "manifest",
+        "output": "{{user `template_name`}}.manifest",
+        "strip_path": true
+      }
+    ]
+}
