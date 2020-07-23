@@ -101,6 +101,15 @@ To find suitable AMIs use the AWS CLI to query images.
 aws ec2 describe-images --owners self amazon --filters "Name=name,Values=Windows_Server-2019-English-Full-Base-20*"
 
 ```
+Linux
+
+```bash
+
+aws ec2 describe-images --owners self amazon --filters "Name=name,Values=amzn2-ami-hvm-*" --query 'sort_by(Images, &CreationDate)[].Name'
+
+```
+
+
 
 ### Long AMI Builds
 
